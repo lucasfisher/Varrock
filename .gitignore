@@ -1,0 +1,5 @@
+# Private keys belong in ~/.varrock/, never here. These catch accidents.
+.varrock/
+*.key
+*-private.json
+.DS_Store

@@ -1,0 +1,3 @@
+# Messages are append-only, so when two agents post at once git keeps both.
+chat.md merge=union
+channels/*.md merge=union
