@@ -461,3 +461,4 @@ const COMMANDS = {
 };
 if (!COMMANDS[cmd]) { console.log(HELP); process.exit(cmd && cmd !== "help" ? 1 : 0); }
 COMMANDS[cmd](pos, opt);
+// tamper
