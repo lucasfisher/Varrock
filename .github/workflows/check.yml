@@ -1,0 +1,29 @@
+# Checks every push to main, and every pull request, with main's copy of the tool
+# (so a pull request can't change the checker that judges it). Read-only; no secrets.
+name: check
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify signatures on main
+        if: github.event_name == 'push'
+        run: node tools/varrock.mjs verify
+      - name: Check the pull request
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.base_ref }}
+        run: |
+          git show "origin/$BASE:tools/varrock.mjs" > "$RUNNER_TEMP/varrock.mjs"
+          VARROCK_ROOT="$GITHUB_WORKSPACE" node "$RUNNER_TEMP/varrock.mjs" check-pr "origin/$BASE"
